@@ -1,0 +1,32 @@
+[
+  {
+    "column": "native.country",
+    "issue_type": "inconsistency",
+    "description": "The 'native.country' column contains inconsistent values. 'USA' and 'usa' are considered different values, while 'U.S.A.' is missing.",
+    "severity": "high"
+  },
+  {
+    "column": "age",
+    "issue_type": "wrong_type",
+    "description": "The 'age' column contains string values instead of numeric values. This could lead to incorrect analysis.",
+    "severity": "high"
+  },
+  {
+    "column": "occupation",
+    "issue_type": "object",
+    "description": "The 'occupation' column contains object values instead of numeric values. This could lead to incorrect analysis.",
+    "severity": "high"
+  },
+  {
+    "column": "hours.per.week",
+    "issue_type": "placeholder",
+    "description": "The 'hours.per.week' column contains a placeholder value ('-99'). This could lead to missing data and could affect analysis.",
+    "severity": "high"
+  },
+  {
+    "column": "income",
+    "issue_type": "outlier",
+    "description": "The 'income' column contains an outlier value (200) that is significantly higher than other values. This could affect the analysis.",
+    "severity": "high"
+  }
+]

@@ -1,0 +1,320 @@
+{
+  "rows": 32561,
+  "columns": [
+    "age",
+    "workclass",
+    "fnlwgt",
+    "education",
+    "education.num",
+    "marital.status",
+    "occupation",
+    "relationship",
+    "race",
+    "sex",
+    "capital.gain",
+    "capital.loss",
+    "hours.per.week",
+    "native.country",
+    "income"
+  ],
+  "column_analysis": {
+    "age": {
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0,
+      "unique_count": 73,
+      "sample_values": [
+        40,
+        27,
+        30,
+        70,
+        29
+      ],
+      "mean": 38.58164675532078,
+      "std": 13.640432553581343,
+      "min": 17.0,
+      "max": 90.0,
+      "zeros_count": 0,
+      "potential_outliers": 121
+    },
+    "workclass": {
+      "dtype": "object",
+      "missing_count": 0,
+      "missing_ratio": 0.0,
+      "unique_count": 9,
+      "sample_values": [
+        "Private",
+        "Private",
+        "Private",
+        "Private",
+        "State-gov"
+      ],
+      "top_values": {
+        "Private": 22696,
+        "Self-emp-not-inc": 2541,
+        "Local-gov": 2093,
+        "?": 1836,
+        "State-gov": 1298
+      },
+      "is_categorical": true
+    },
+    "fnlwgt": {
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0,
+      "unique_count": 21648,
+      "sample_values": [
+        75785,
+        210945,
+        125000,
+        256211,
+        42401
+      ],
+      "mean": 189778.36651208502,
+      "std": 105549.97769702224,
+      "min": 12285.0,
+      "max": 1484705.0,
+      "zeros_count": 0,
+      "potential_outliers": 347
+    },
+    "education": {
+      "dtype": "object",
+      "missing_count": 0,
+      "missing_ratio": 0.0,
+      "unique_count": 16,
+      "sample_values": [
+        "HS-grad",
+        "Bachelors",
+        "Assoc-acdm",
+        "Bachelors",
+        "HS-grad"
+      ],
+      "top_values": {
+        "HS-grad": 10501,
+        "Some-college": 7291,
+        "Bachelors": 5355,
+        "Masters": 1723,
+        "Assoc-voc": 1382
+      },
+      "is_categorical": true
+    },
+    "education.num": {
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0,
+      "unique_count": 16,
+      "sample_values": [
+        9,
+        9,
+        10,
+        9,
+        10
+      ],
+      "mean": 10.0806793403151,
+      "std": 2.5727203320673877,
+      "min": 1.0,
+      "max": 16.0,
+      "zeros_count": 0,
+      "potential_outliers": 219
+    },
+    "marital.status": {
+      "dtype": "object",
+      "missing_count": 0,
+      "missing_ratio": 0.0,
+      "unique_count": 7,
+      "sample_values": [
+        "Divorced",
+        "Never-married",
+        "Never-married",
+        "Married-civ-spouse",
+        "Never-married"
+      ],
+      "top_values": {
+        "Married-civ-spouse": 14976,
+        "Never-married": 10683,
+        "Divorced": 4443,
+        "Separated": 1025,
+        "Widowed": 993
+      },
+      "is_categorical": true
+    },
+    "occupation": {
+      "dtype": "object",
+      "missing_count": 0,
+      "missing_ratio": 0.0,
+      "unique_count": 15,
+      "sample_values": [
+        "Prof-specialty",
+        "Prof-specialty",
+        "?",
+        "Craft-repair",
+        "Tech-support"
+      ],
+      "top_values": {
+        "Prof-specialty": 4140,
+        "Craft-repair": 4099,
+        "Exec-managerial": 4066,
+        "Adm-clerical": 3770,
+        "Sales": 3650
+      },
+      "is_categorical": true
+    },
+    "relationship": {
+      "dtype": "object",
+      "missing_count": 0,
+      "missing_ratio": 0.0,
+      "unique_count": 6,
+      "sample_values": [
+        "Own-child",
+        "Not-in-family",
+        "Not-in-family",
+        "Husband",
+        "Own-child"
+      ],
+      "top_values": {
+        "Husband": 13193,
+        "Not-in-family": 8305,
+        "Own-child": 5068,
+        "Unmarried": 3446,
+        "Wife": 1568
+      },
+      "is_categorical": true
+    },
+    "race": {
+      "dtype": "object",
+      "missing_count": 0,
+      "missing_ratio": 0.0,
+      "unique_count": 5,
+      "sample_values": [
+        "White",
+        "White",
+        "White",
+        "Asian-Pac-Islander",
+        "White"
+      ],
+      "top_values": {
+        "White": 27816,
+        "Black": 3124,
+        "Asian-Pac-Islander": 1039,
+        "Amer-Indian-Eskimo": 311,
+        "Other": 271
+      },
+      "is_categorical": true
+    },
+    "sex": {
+      "dtype": "object",
+      "missing_count": 0,
+      "missing_ratio": 0.0,
+      "unique_count": 2,
+      "sample_values": [
+        "Male",
+        "Female",
+        "Male",
+        "Male",
+        "Male"
+      ],
+      "top_values": {
+        "Male": 21790,
+        "Female": 10771
+      },
+      "is_categorical": true
+    },
+    "capital.gain": {
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0,
+      "unique_count": 119,
+      "sample_values": [
+        0,
+        99999,
+        0,
+        0,
+        0
+      ],
+      "mean": 1077.6488437087312,
+      "std": 7385.292084840339,
+      "min": 0.0,
+      "max": 99999.0,
+      "zeros_count": 29849,
+      "potential_outliers": 215
+    },
+    "capital.loss": {
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0,
+      "unique_count": 92,
+      "sample_values": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "mean": 87.303829734959,
+      "std": 402.96021864899967,
+      "min": 0.0,
+      "max": 4356.0,
+      "zeros_count": 31042,
+      "potential_outliers": 1470
+    },
+    "hours.per.week": {
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0,
+      "unique_count": 94,
+      "sample_values": [
+        40,
+        38,
+        50,
+        40,
+        50
+      ],
+      "mean": 40.437455852092995,
+      "std": 12.347428681731843,
+      "min": 1.0,
+      "max": 99.0,
+      "zeros_count": 0,
+      "potential_outliers": 440
+    },
+    "native.country": {
+      "dtype": "object",
+      "missing_count": 0,
+      "missing_ratio": 0.0,
+      "unique_count": 42,
+      "sample_values": [
+        "United-States",
+        "United-States",
+        "?",
+        "United-States",
+        "United-States"
+      ],
+      "top_values": {
+        "United-States": 29170,
+        "Mexico": 643,
+        "?": 583,
+        "Philippines": 198,
+        "Germany": 137
+      },
+      "is_categorical": true
+    },
+    "income": {
+      "dtype": "object",
+      "missing_count": 0,
+      "missing_ratio": 0.0,
+      "unique_count": 2,
+      "sample_values": [
+        "<=50K",
+        "<=50K",
+        "<=50K",
+        "<=50K",
+        "<=50K"
+      ],
+      "top_values": {
+        "<=50K": 24720,
+        ">50K": 7841
+      },
+      "is_categorical": true
+    }
+  },
+  "overall_health": {}
+}

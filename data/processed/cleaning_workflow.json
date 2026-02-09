@@ -1,0 +1,54 @@
+{
+  "steps": [
+    {
+      "step_id": 1,
+      "column": "native.country",
+      "operation": "replace",
+      "params": {
+        "old": "USA,usa,U.S.A.",
+        "new": "Unknown"
+      }
+    },
+    {
+      "step_id": 2,
+      "column": "age",
+      "operation": "replace",
+      "params": {
+        "old": "?",
+        "new": "NaN"
+      }
+    },
+    {
+      "step_id": 3,
+      "column": "occupation",
+      "operation": "replace",
+      "params": {
+        "old": "object",
+        "new": "string"
+      }
+    },
+    {
+      "step_id": 4,
+      "column": "hours.per.week",
+      "operation": "replace",
+      "params": {
+        "old": "-99",
+        "new": "NaN"
+      }
+    },
+    {
+      "step_id": 5,
+      "column": "income",
+      "operation": "replace",
+      "params": {
+        "old": 200,
+        "new": "NaN"
+      }
+    },
+    {
+      "step_id": 6,
+      "operation": "drop_duplicates",
+      "params": {}
+    }
+  ]
+}
