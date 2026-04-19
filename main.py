@@ -20,6 +20,9 @@ from workflow_generator import WorkflowGenerator
 from executor import Executor
 from evaluation import Evaluator
 
+# Ensure directories exist for logging
+os.makedirs("logs", exist_ok=True)
+
 # Setup Logging
 logging.basicConfig(
     level=logging.INFO,
@@ -40,7 +43,6 @@ def main():
 
     # Ensure output directories exist
     os.makedirs("data/processed", exist_ok=True)
-    os.makedirs("logs", exist_ok=True)
     
     # Auto-detect dataset if not provided
     if args.dataset is None:
