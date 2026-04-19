@@ -120,12 +120,16 @@ class Evaluator:
             # Drop datetime columns from features (can't feed to sklearn)
             datetime_cols = X.select_dtypes(include=['datetime64', 'datetimetz']).columns.tolist()
             # Also detect string columns that look like times/dates
+            import warnings
             for col in X.select_dtypes(include=['object']).columns:
                 sample = X[col].dropna().head(20)
+                if len(sample) == 0: continue
                 try:
-                    pd.to_datetime(sample)
+                    with warnings.catch_warnings():
+                        warnings.simplefilter("ignore")
+                        pd.to_datetime(sample, errors='raise')
                     datetime_cols.append(col)
-                except (ValueError, TypeError):
+                except Exception:
                     pass
             if datetime_cols:
                 X = X.drop(columns=datetime_cols, errors='ignore')
