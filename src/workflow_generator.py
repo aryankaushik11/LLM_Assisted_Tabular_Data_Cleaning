@@ -107,7 +107,7 @@ SUPPORTED OPERATIONS:
 RULES:
 - Every phase MUST have at least one step. If no issue exists for a phase, add a no_action step with operation "no_action".
 - DO NOT use split_column on currencies or numbers (like $780,000,000). Instead, use "clean_text" to remove '$,' and then "cast_type" to "int" or "float" in PHASE 6.
-- For columns that contain ONLY time values (like "2:35 p.m.", "14:30"), the system will standardize them to '00/00/0000 HH:MM' format. Format dates normally if they contain hints of an actual date.
+- For columns that contain ONLY time values (like "2:35 p.m.", "14:30"), the system will standardize them to 24 hr 'HH:MM' format. Format dates normally if they contain hints of an actual date.
 - If a column has placeholder "?" values, first "replace" them with NaN, then "fill_na".
 - DO NOT DROP ROWS UNLESS ABSOLUTELY NECESSARY! Dropping rows hurts benchmark accuracy. Try imputation or filling first. Only drop_na if an essential feature is entirely unrecoverable.
 - Step IDs must be sequential starting from 1.
@@ -116,7 +116,7 @@ RULES:
 
 IMPUTATION RULES:
 - For "fill_na", always use {{"strategy": "mean/median/mode/ffill/bfill"}}, NOT {{"value": "some_literal"}}.
-- If multiple rows belong to the same logical entity (e.g. same 'flight' number, 'user_id', or 'transaction_id'), you MUST use the "group_by" parameter in "fill_na" (e.g., {{"strategy": "mode", "group_by": "flight"}}). This ensures contextual imputation instead of blind global averaging.
+- If multiple rows belong to the same logical entity (e.g. same 'flight' number, 'user_id', 'item_name', or 'transaction_id'), you MUST use the "group_by" parameter in "fill_na" (e.g., {{"strategy": "mode", "group_by": "flight"}}). This ensures contextual imputation instead of blind global averaging.
 - For NUMERIC columns: use "median" if skewness > 1 or outliers > 0; use "mean" if symmetric.
 - For CATEGORICAL columns: always use "mode" (preferably with "group_by" if an entity column exists).
 

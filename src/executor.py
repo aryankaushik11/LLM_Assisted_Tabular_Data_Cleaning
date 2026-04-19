@@ -41,7 +41,7 @@ def is_time_only_column(series: pd.Series) -> bool:
 
 def standardize_time_string(val):
     """
-    Converts a time string like '2:35 p.m.' to a standardized format '00/00/0000 HH:MM'.
+    Converts a time string like '2:35 p.m.' to a standardized 24 hr format 'HH:MM'.
     Returns the original value if parsing fails.
     """
     if pd.isna(val):
@@ -63,7 +63,7 @@ def standardize_time_string(val):
         clean_s = clean_s.replace('A.M.', 'AM').replace('P.M.', 'PM')
         # Prepend a dummy date to avoid OutOfBoundsDatetime for '3 AM'
         parsed = pd.to_datetime("2000-01-01 " + clean_s, errors='raise')
-        return parsed.strftime('00/00/0000 %H:%M')
+        return parsed.strftime('%H:%M')
     except Exception:
         # If it happens to be a valid date, parse and format it fully
         try:
@@ -98,6 +98,11 @@ class Executor:
         Applies transformations step-by-step with detailed reporting.
         """
         df_clean = df.copy()
+        
+        # Globally ensure empty strings, whitespace, and common null strings are cast to actual np.nan
+        # so that missing value imputations work deterministically
+        df_clean = df_clean.replace(r'^\s*$', np.nan, regex=True)
+        df_clean = df_clean.replace(['NaN', 'nan', 'None', 'none', 'N/A', 'n/a'], np.nan)
         
         steps = workflow.get("steps", [])
         logger.info(f"Executing {len(steps)} cleaning steps across {len(PHASE_ORDER)} phases.")
