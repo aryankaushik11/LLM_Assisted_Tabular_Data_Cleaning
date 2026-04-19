@@ -70,6 +70,7 @@ Look at the SAMPLE DATA rows above carefully. Cross-reference what you see in th
 {"8. IMPORTANT: The target column '" + target_col + "' is the label for ML. Do NOT drop it or alter its values." if target_col else ""}
 9. Are there data types that should be cast, or text fields that need formatting (e.g. lowering case, stripping $ or commas)?
 10. For missing data, are there logical entities (like "flight" or "user_id") that can be grouped to provide accurate contextual imputation instead of global averaging?
+11. CRITICAL: Removing/dropping rows should be your absolute LAST option. It hurts downstream benchmark metrics. Always prefer inference or imputation.
 
 OUTPUT FORMAT:
 Return a JSON object with a list of "issues". Each issue must have:

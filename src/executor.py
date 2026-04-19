@@ -41,7 +41,7 @@ def is_time_only_column(series: pd.Series) -> bool:
 
 def standardize_time_string(val):
     """
-    Converts a time string like '2:35 p.m.' to a standardized 24-hour format 'HH:MM'.
+    Converts a time string like '2:35 p.m.' to a standardized format '00/00/0000 HH:MM'.
     Returns the original value if parsing fails.
     """
     if pd.isna(val):
@@ -50,14 +50,27 @@ def standardize_time_string(val):
     if s.lower() in ('nan', 'none', 'nat', ''):
         return np.nan
     try:
+        # Extract time part using regex to ignore " (Estimated runway)" etc.
+        import re
+        time_match = re.search(r'(\d{1,2}:\d{2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?|AM|PM)?|\d{1,2}\s*(?:a\.?m\.?|p\.?m\.?|AM|PM))', s, re.IGNORECASE)
+        if time_match:
+            s_time = time_match.group(1)
+        else:
+            s_time = s
+            
         # Pre-clean common formats that pd.to_datetime struggles with
-        clean_s = s.replace('a.m.', 'AM').replace('p.m.', 'PM')
+        clean_s = s_time.replace('a.m.', 'AM').replace('p.m.', 'PM')
         clean_s = clean_s.replace('A.M.', 'AM').replace('P.M.', 'PM')
         # Prepend a dummy date to avoid OutOfBoundsDatetime for '3 AM'
         parsed = pd.to_datetime("2000-01-01 " + clean_s, errors='raise')
-        return parsed.strftime('%H:%M')
+        return parsed.strftime('00/00/0000 %H:%M')
     except Exception:
-        return val
+        # If it happens to be a valid date, parse and format it fully
+        try:
+            parsed = pd.to_datetime(s, errors='raise')
+            return parsed.strftime('%Y-%m-%d %H:%M')
+        except Exception:
+            return val
 
 
 class Executor:

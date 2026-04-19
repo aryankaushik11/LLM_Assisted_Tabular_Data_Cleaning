@@ -107,8 +107,9 @@ SUPPORTED OPERATIONS:
 RULES:
 - Every phase MUST have at least one step. If no issue exists for a phase, add a no_action step with operation "no_action".
 - DO NOT use split_column on currencies or numbers (like $780,000,000). Instead, use "clean_text" to remove '$,' and then "cast_type" to "int" or "float" in PHASE 6.
-- For columns that contain ONLY time values (like "2:35 p.m.", "14:30"), do NOT convert them to full datetime. The system will standardize them to HH:MM format automatically. Only use format_datetime on columns that actually contain dates.
+- For columns that contain ONLY time values (like "2:35 p.m.", "14:30"), the system will standardize them to '00/00/0000 HH:MM' format. Format dates normally if they contain hints of an actual date.
 - If a column has placeholder "?" values, first "replace" them with NaN, then "fill_na".
+- DO NOT DROP ROWS UNLESS ABSOLUTELY NECESSARY! Dropping rows hurts benchmark accuracy. Try imputation or filling first. Only drop_na if an essential feature is entirely unrecoverable.
 - Step IDs must be sequential starting from 1.
 - Each step MUST have "phase", "column", "operation", "params", and "reason" fields.
 {"- CRITICAL: Do NOT drop or alter the target column '" + target_col + "'. It is the ML label." if target_col else ""}
