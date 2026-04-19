@@ -4,6 +4,7 @@ import re
 import logging
 import json
 from collections import OrderedDict
+from pandas.api.types import is_numeric_dtype
 
 logger = logging.getLogger(__name__)
 
@@ -173,9 +174,9 @@ class Executor:
                             desc_prefix = f"[Grouped by {group_by}] "
                             
                             def group_impute(x):
-                                if strategy == "mean" and np.issubdtype(x.dtype, np.number):
+                                if strategy == "mean" and is_numeric_dtype(x):
                                     return x.fillna(x.mean())
-                                elif strategy == "median" and np.issubdtype(x.dtype, np.number):
+                                elif strategy == "median" and is_numeric_dtype(x):
                                     return x.fillna(x.median())
                                 elif strategy == "mode":
                                     m = x.mode()
@@ -194,9 +195,9 @@ class Executor:
                             remaining_nulls = int(df_clean[col].isnull().sum())
                             if remaining_nulls > 0:
                                 # Fallback to global
-                                if strategy == "mean" and np.issubdtype(df_clean[col].dtype, np.number):
+                                if strategy == "mean" and is_numeric_dtype(df_clean[col]):
                                     df_clean[col] = df_clean[col].fillna(df_clean[col].mean())
-                                elif strategy == "median" and np.issubdtype(df_clean[col].dtype, np.number):
+                                elif strategy == "median" and is_numeric_dtype(df_clean[col]):
                                     df_clean[col] = df_clean[col].fillna(df_clean[col].median())
                                 elif strategy == "mode":
                                     m = df_clean[col].mode()
@@ -209,11 +210,11 @@ class Executor:
                             
                         else:
                             # Standard global imputation
-                            if strategy == "mean" and np.issubdtype(df_clean[col].dtype, np.number):
+                            if strategy == "mean" and is_numeric_dtype(df_clean[col]):
                                 fill_val = df_clean[col].mean()
                                 df_clean[col] = df_clean[col].fillna(fill_val)
                                 desc = f"Filled {nulls_in_col} nulls with mean={fill_val:.2f}"
-                            elif strategy == "median" and np.issubdtype(df_clean[col].dtype, np.number):
+                            elif strategy == "median" and is_numeric_dtype(df_clean[col]):
                                 fill_val = df_clean[col].median()
                                 df_clean[col] = df_clean[col].fillna(fill_val)
                                 desc = f"Filled {nulls_in_col} nulls with median={fill_val:.2f}"
@@ -229,7 +230,7 @@ class Executor:
                                 df_clean[col] = df_clean[col].bfill()
                                 desc = f"Back-filled {nulls_in_col} nulls"
                             elif strategy == "interpolate":
-                                if np.issubdtype(df_clean[col].dtype, np.number):
+                                if is_numeric_dtype(df_clean[col]):
                                     df_clean[col] = df_clean[col].interpolate(method='linear')
                                     desc = f"Interpolated {nulls_in_col} nulls (linear)"
                                 else:
@@ -352,7 +353,7 @@ class Executor:
                 elif op == "remove_outliers":
                     method = params.get("method", "z-score")
                     threshold = params.get("threshold", 3)
-                    if col and col in df_clean.columns and np.issubdtype(df_clean[col].dtype, np.number):
+                    if col and col in df_clean.columns and is_numeric_dtype(df_clean[col]):
                         if method == "z-score":
                             mean = df_clean[col].mean()
                             std = df_clean[col].std()

@@ -6,6 +6,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from sklearn.impute import SimpleImputer
 import logging
+from pandas.api.types import is_numeric_dtype
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +96,7 @@ class Evaluator:
             task_type = "regression"
         elif n_unique <= 20 or (n_unique / n_rows < 0.05 and n_unique <= 50):
             task_type = "classification"
-        elif np.issubdtype(target_dtype, np.number):
+        elif is_numeric_dtype(target_dtype):
             task_type = "regression"
         else:
             # High-cardinality string column - try classification if reasonable
@@ -123,7 +124,7 @@ class Evaluator:
             for col in X.select_dtypes(include=['object']).columns:
                 sample = X[col].dropna().head(20)
                 try:
-                    pd.to_datetime(sample)
+                    pd.to_datetime(sample, infer_datetime_format=True)
                     datetime_cols.append(col)
                 except (ValueError, TypeError):
                     pass
