@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import json
 import logging
+from pandas.api.types import is_numeric_dtype
 
 logger = logging.getLogger(__name__)
 
@@ -75,7 +76,7 @@ class DataProfiler:
             }
 
             # ── Type Specific Analysis ──────────────────────────────────
-            if np.issubdtype(col_data.dtype, np.number):
+            if is_numeric_dtype(col_data):
                 col_stats.update({
                     "mean": float(col_data.mean()) if not col_data.empty else None,
                     "std": float(col_data.std()) if not col_data.empty else None,
@@ -276,7 +277,7 @@ class DataProfiler:
             col_line = f"  [{col}] type={dtype}, unique={unique}, missing={missing}"
             
             # Add type-specific context
-            if np.issubdtype(df[col].dtype, np.number):
+            if is_numeric_dtype(df[col]):
                 skew = stats.get("skewness", 0)
                 mean_val = stats.get("mean", 0)
                 median_val = stats.get("median", 0)
