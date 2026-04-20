@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 def main():
     parser = argparse.ArgumentParser(description="LLM-Assisted Data Cleaning Pipeline")
     parser.add_argument("--dataset", type=str, default=None, help="Filename in data/raw (auto-detected if None)")
-    parser.add_argument("--llm_provider", type=str, default="ollama", help="ollama or google")
+    parser.add_argument("--llm_provider", type=str, default=os.getenv("LLM_PROVIDER", "ollama"), help="ollama or google")
     parser.add_argument("--target_col", type=str, default=None, help="Target column for ML eval (auto-detected if None)")
     args = parser.parse_args()
 

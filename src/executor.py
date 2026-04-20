@@ -289,7 +289,11 @@ class Executor:
                     new_columns = params.get("new_columns", [])
                     if col and col in df_clean.columns:
                         # Perform the split
-                        split_result = df_clean[col].astype(str).str.split(delimiter, expand=True)
+                        # Smart split for comma to avoid splitting numbers with thousands separators
+                        if delimiter == ",":
+                            split_result = df_clean[col].astype(str).str.split(r'(?<!\d),|,(?!\d)', expand=True, regex=True)
+                        else:
+                            split_result = df_clean[col].astype(str).str.split(delimiter, expand=True)
                         
                         # Determine new column names
                         n_parts = split_result.shape[1]
