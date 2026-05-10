@@ -71,7 +71,7 @@ PHASE 4 - DROP UNNEEDED COLUMNS (phase: "drop_columns"):
   Drop constant, near-empty, redundant, or ID-like columns.
   
 PHASE 5 - SPLIT COLUMNS (phase: "split_columns"):
-  Split delimited columns into multiple new columns (e.g. City/State). DO NOT split numbers/currencies!
+  Split delimited columns ONLY if they have a small, fixed number of components (e.g. City/State). DO NOT split natural language text (e.g. descriptions), unbounded lists (e.g. cast, actors, producers, locations), or numbers/currencies!
   
 PHASE 6 - STANDARDIZE & FORMAT (phase: "standardize"):
   Clean text (remove currency symbols $, commas ,), format dates (YYYY-MM-DD), and fix data types using cast_type.
@@ -103,11 +103,13 @@ SUPPORTED OPERATIONS:
 10. "strip_whitespace" - params: {{}}
 11. "clean_text"       - params: {{"remove_chars": "$,", "case": "title/upper/lower"}} (Removes characters via regex & sets case)
 12. "format_datetime"  - params: {{"format": "%Y-%m-%d"}}
+13. "extract_pattern"  - params: {{"pattern": "([0-9]+ [A-Za-z]+ [0-9]{4})" }} (Extracts a regex group)
 
 RULES:
 - Every phase MUST have at least one step. If no issue exists for a phase, add a no_action step with operation "no_action".
-- DO NOT use split_column on currencies or numbers (like $780,000,000). Instead, use "clean_text" to remove '$,' and then "cast_type" to "int" or "float" in PHASE 6.
+- CRITICAL: DO NOT use split_column on natural language descriptions, unbounded lists of items (like actors, cast, locations), or currencies/numbers. Splitting these ruins the dataset schema! Instead, leave text/lists intact, and merely format numbers/currencies using "clean_text" and "cast_type".
 - For columns that contain ONLY time values (like "2:35 p.m.", "14:30"), the system will standardize them to 24 hr 'HH:MM' format. Format dates normally if they contain hints of an actual date.
+- CRITICAL: If a date column contains messy text (e.g. "8 September 1960 (USA)"), DO NOT drop it! Instead, use "extract_pattern" with an appropriate regex (e.g. "([0-9]+ [A-Za-z]+ [0-9]{4})") to isolate the date, and then use "cast_type" to datetime.
 - If a column has placeholder "?" values, first "replace" them with NaN, then "fill_na".
 - DO NOT DROP ROWS UNLESS ABSOLUTELY NECESSARY! Dropping rows hurts benchmark accuracy. Try imputation or filling first. Only drop_na if an essential feature is entirely unrecoverable.
 - Step IDs must be sequential starting from 1.

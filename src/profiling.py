@@ -120,17 +120,25 @@ class DataProfiler:
                 if col_data.dtype == object:
                     sample_vals = col_data.dropna().head(100).astype(str)
                     for delimiter in [",", ";", "|", " - ", " / ", ":"]:
-                        contains_delim = sample_vals.str.contains(delimiter, na=False, regex=False)
-                        delim_ratio = contains_delim.sum() / len(sample_vals) if len(sample_vals) > 0 else 0
+                        delim_counts = sample_vals.apply(lambda x: x.count(delimiter))
+                        rows_with_delim = (delim_counts > 0).sum()
+                        delim_ratio = rows_with_delim / len(sample_vals) if len(sample_vals) > 0 else 0
+                        
                         if delim_ratio > 0.3:  # >30% of values contain the delimiter
-                            profile["splittable_columns"].append({
-                                "column": col,
-                                "delimiter": delimiter,
-                                "occurrence_ratio": round(float(delim_ratio), 4)
-                            })
-                            col_stats["splittable"] = True
-                            col_stats["suggested_delimiter"] = delimiter
-                            break
+                            avg_len = sample_vals.str.len().mean()
+                            max_delim = delim_counts.max()
+                            median_delim = delim_counts.median()
+                            
+                            # Skip descriptions/unbounded lists: Must not be too long and must have few delimiters
+                            if avg_len < 50 and median_delim > 0 and median_delim <= 3 and max_delim <= 5:
+                                profile["splittable_columns"].append({
+                                    "column": col,
+                                    "delimiter": delimiter,
+                                    "occurrence_ratio": round(float(delim_ratio), 4)
+                                })
+                                col_stats["splittable"] = True
+                                col_stats["suggested_delimiter"] = delimiter
+                                break
             
             # ── Droppable Column Detection ──────────────────────────────
             # Flag columns that are likely unneeded
@@ -152,8 +160,10 @@ class DataProfiler:
             
             # High cardinality ID-like columns (unique count == row count for non-numeric)
             if col_data.dtype == object and unique_count == len(df) and len(df) > 100:
-                is_droppable = True
-                drop_reason.append("likely_unique_id")
+                col_lower = col.lower()
+                if "date" not in col_lower and "time" not in col_lower and "year" not in col_lower:
+                    is_droppable = True
+                    drop_reason.append("likely_unique_id")
             
             if is_droppable:
                 profile["droppable_columns"].append({

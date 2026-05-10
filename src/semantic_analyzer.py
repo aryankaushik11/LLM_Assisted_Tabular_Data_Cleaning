@@ -64,11 +64,11 @@ Look at the SAMPLE DATA rows above carefully. Cross-reference what you see in th
 2. Is this column's dtype correct? (e.g., a numeric column stored as object because of placeholders)
 3. Are there inconsistent categorical values? (e.g., leading/trailing spaces, mixed case)
 4. Are there duplicate rows that should be removed?
-5. Are any columns redundant or unneeded? (e.g., two columns encoding the same info)
-6. Are any columns genuinely splittable? (e.g., "City, State" in one column). DO NOT split currency strings or integers (e.g. $780,000)! Instead, those should be cleaned and cast.
+5. Are any columns redundant or unneeded? (e.g., two columns encoding the same info). CRITICAL: Do NOT consider date/time columns redundant or droppable just because they contain messy extra text like '8 September 1960 (USA)' or many unique values. Dates are highly valuable. Recommend extracting the date instead.
+6. Are any columns genuinely fixed-length splittable? (e.g. "City, State"). DO NOT split natural language fields (like "description", "summary"), unbounded lists (like "actors", "cast", "producers", "locations"), or numbers/currencies! Splitting sentences or lists of names creates absurd column counts. Leave them intact.
 7. For numeric columns, does the skewness or outlier count suggest cleaning is needed?
 {"8. IMPORTANT: The target column '" + target_col + "' is the label for ML. Do NOT drop it or alter its values." if target_col else ""}
-9. Are there data types that should be cast, or text fields that need formatting (e.g. lowering case, stripping $ or commas)?
+9. Are there data types that should be cast, or text fields that need formatting (e.g. lowering case, stripping $ or commas)? For messy dates, recommend 'extract_pattern' to isolate the date string, then 'cast_type' to datetime.
 10. For missing data, are there logical entities (like "flight" or "user_id" or "item_name") that can be grouped to provide accurate contextual imputation instead of global averaging?
 11. CRITICAL: Removing/dropping rows should be your absolute LAST option. It hurts downstream benchmark metrics. Always prefer inference or imputation.
 

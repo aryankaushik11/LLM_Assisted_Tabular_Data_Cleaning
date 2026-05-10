@@ -431,6 +431,29 @@ class Executor:
                         self._record_step(phase, step_id, op, col, "skipped", reason,
                                           f"Column '{col}' not found")
                 
+                # ── OPERATION: extract_pattern ──────────────────────────
+                elif op == "extract_pattern":
+                    pattern = params.get("pattern")
+                    if col and col in df_clean.columns and pattern:
+                        try:
+                            # Ensure the pattern has a capture group
+                            if "(" not in pattern:
+                                pattern = f"({pattern})"
+                            elif pattern.count('(') != pattern.count(')'):
+                                # Naive fix if unbalanced
+                                if pattern.count('(') > pattern.count(')'):
+                                    pattern = pattern + ')'
+                                else:
+                                    pattern = '(' + pattern
+                            df_clean[col] = df_clean[col].astype(str).str.extract(pattern, expand=False)
+                            self._record_step(phase, step_id, op, col, "executed", reason,
+                                              f"Extracted regex pattern '{pattern}' in '{col}'")
+                        except Exception as e:
+                            self._record_step(phase, step_id, op, col, "failed", reason, f"Invalid regex pattern: {e}")
+                    else:
+                        self._record_step(phase, step_id, op, col, "skipped", reason,
+                                          f"Column '{col}' not found or pattern missing")
+                
                 else:
                     logger.warning(f"Unknown operation: {op}")
                     self._record_step(phase, step_id, op, col, "skipped", reason,
